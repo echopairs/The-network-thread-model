@@ -2,6 +2,7 @@
 *.[oa]
 
 #显示要忽略的目录
+.dea/
 external_libs/
 build/
 cmake-build-debug/
