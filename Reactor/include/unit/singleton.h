@@ -2,8 +2,8 @@
 // Created by pairs on 4/17/17.
 //
 
-#ifndef PROJECT_SINGLETON_H
-#define PROJECT_SINGLETON_H
+#ifndef REACTOR_SINGLETON_H
+#define REACTOR_SINGLETON_H
 
 #include <memory>
 #include <mutex>

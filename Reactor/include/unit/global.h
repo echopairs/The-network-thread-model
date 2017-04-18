@@ -2,8 +2,8 @@
 // Created by pairs on 4/18/17.
 //
 
-#ifndef PROJECT_GLOBAL_H
-#define PROJECT_GLOBAL_H
+#ifndef REACTOR_GLOBAL_H
+#define REACTOR_GLOBAL_H
 
 #include <unit/singleton.h>
 
