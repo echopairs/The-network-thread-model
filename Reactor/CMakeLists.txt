@@ -1,3 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
+set(CMAKE_CXX_FLAGS "-g -std=c++11")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 ADD_SUBDIRECTORY(test)
