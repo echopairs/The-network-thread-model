@@ -24,7 +24,7 @@ namespace reactor
 
     private:
         std::mutex events_mutex_;
-        std::map<handle_t, std::shared_ptr<IEventHandler>> event_handlers_;
+        std::map<handle_t, std::shared_ptr<IEventHandler> > event_handlers_;
         std::shared_ptr<EventDemultiplexer> event_io_ptr_;
         std::shared_ptr<TimeHeap> event_timer_ptr_;
     };

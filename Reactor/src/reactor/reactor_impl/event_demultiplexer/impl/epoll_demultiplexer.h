@@ -6,9 +6,11 @@
 #define REACTOR_EPOLL_DEMULTIPLEXER_H
 
 #include "../event_demultiplexer.h"
+#include <atomic>
 
 namespace reactor
 {
+
     class EpollDemultiplexer : public EventDemultiplexer
     {
     public:
@@ -18,7 +20,11 @@ namespace reactor
         int RegisterEvent(handle_t , event_t) override ;
         int UnRegisterEvent(handle_t) override ;
 
-        void WaitEvent() override ;
+        void WaitEvents(std::map<handle_t, std::shared_ptr<IEventHandler>> *handlers) override ;
+
+    private:
+        int epfd_;
+        std::atomic<int> fd_num_;
     };
 }
 #endif //REACTOR_EPOLL_DEMULTIPLEXER_H
