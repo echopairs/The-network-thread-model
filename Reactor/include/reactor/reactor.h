@@ -15,7 +15,7 @@ class Reactor
 public:
     Reactor();
     ~Reactor();
-    int RegisterHandler(std::shared_ptr<IEventHandler> handler, int id);
+    int RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt);
     int UnRegisterHandler(std::shared_ptr<IEventHandler>);
 
     void HandleEvents();
@@ -24,7 +24,7 @@ public:
 private:
     Reactor(const Reactor&);
     Reactor &operator=(const Reactor &);
-    std::shared_ptr<ReactorImpl> r_impl_;
+    std::shared_ptr<ReactorImpl> reactor_impl_ptr_;
 };
 }
 
