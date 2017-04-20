@@ -17,4 +17,18 @@ set(REACTOR_SRC
 
 add_library(reactor ${REACTOR_SRC})
 
+set(EXAMPLE_SER_SRC example/example_server.cpp
+        example/request_handler.h
+        include/unit/socket_help.h)
+add_executable(example_server ${EXAMPLE_SER_SRC})
+target_link_libraries(example_server ${reactor_SOURCE_DIR}/build/libreactor.a)
+
+set(EXAMPLE_CLT_SRC
+        example/example_client.cpp
+        include/unit/socket_help.h)
+add_executable(example_client ${EXAMPLE_CLT_SRC})
+target_link_libraries(example_client ${reactor_SOURCE_DIR}/build/libreactor.a)
+
+
+
 ADD_SUBDIRECTORY(test)
