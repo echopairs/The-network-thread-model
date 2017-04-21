@@ -4,7 +4,6 @@ set(CMAKE_CXX_FLAGS "-g -std=c++11")
 include_directories(${reactor_SOURCE_DIR}/include)
 
 set(REACTOR_SRC
-        include/unit/global.h
         include/unit/singleton.h
         include/reactor/reactor.h
         include/reactor/event_handler.h
