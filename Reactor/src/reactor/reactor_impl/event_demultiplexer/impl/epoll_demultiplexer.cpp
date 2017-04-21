@@ -45,9 +45,10 @@ namespace reactor
                 {
                     return -errno;
                 }
+                fd_num_++;
             }
         }
-        fd_num_++;
+
         return 0;
     }
 

@@ -10,6 +10,7 @@ int main()
 {
     auto server = std::make_shared<ListenServer>("127.0.0.1", 23333);
     server->Start();
+    server->set_this_shared_ptr_(server);
     unit::SingleTon<Reactor>::Instance()->RegisterHandler(server, reactor::kReadEvent);
     while(1) {
         unit::SingleTon<Reactor>::Instance()->HandleEvents();

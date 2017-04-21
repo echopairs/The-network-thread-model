@@ -24,7 +24,6 @@ namespace reactor
     {
         // just one thread not necessity but we may change to multithreading
         std::lock_guard<std::mutex> l(events_mutex_);
-        std::cout << "Register handle, handle id is: " << handler->get_handle() << std::endl;
         event_handlers_[handler->get_handle()] = handler;
         return event_io_ptr_->RegisterEvent(handler->get_handle(), evt);
     }
@@ -41,7 +40,6 @@ namespace reactor
     {
         // TODO signal events
         // TODO timeout events
-        std::cout << "tick task for handleEvents" << std::endl;
         event_io_ptr_->WaitEvents(&event_handlers_);
     }
 }

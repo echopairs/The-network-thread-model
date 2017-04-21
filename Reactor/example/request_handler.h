@@ -87,8 +87,9 @@ namespace reactor
             }
         }
         virtual void HandleError() {
-            close(get_handle());
+            std::cout << "request handle error" << std::endl;
             unit::SingleTon<Reactor>::Instance()->UnRegisterHandler(get_handle());
+            close(get_handle());
         }
 
         void setParse_cb_(const ParseCb &parse_cb_) {
@@ -116,12 +117,9 @@ namespace reactor
             reactor::bind_socket(listenfd, port_);
             reactor::listen_socket(listenfd);
             set_handle(listenfd);
-
-            std::cout << "listen handle id is :" << listenfd << std::endl;
         }
 
         virtual void HandleRead() {
-            std::cout << "recv connect" << std::endl;
             while(true)
             {
                 struct sockaddr_in clientaddr;
@@ -146,9 +144,10 @@ namespace reactor
                     {
                         perror("accept failed");
                     }
-                    return ;
+                    break ;
                 }
             }
+            unit::SingleTon<Reactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), reactor::kReadEvent);
         }
 
         virtual void HandleWrite() {
@@ -159,7 +158,9 @@ namespace reactor
 
         }
 
-
+        ~ListenServer() {
+            close(get_handle());
+        }
     private:
         std::string ip_;
         unsigned short port_;
