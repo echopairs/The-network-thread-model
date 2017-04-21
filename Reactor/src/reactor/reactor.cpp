@@ -24,9 +24,9 @@ namespace reactor
         reactor_impl_ptr_->RegisterHandler(handler, evt);
     }
 
-    int Reactor::UnRegisterHandler(std::shared_ptr <IEventHandler> handler)
+    int Reactor::UnRegisterHandler(handle_t t)
     {
-        reactor_impl_ptr_->UnRegisterHandler(handler);
+        reactor_impl_ptr_->UnRegisterHandler(t);
     }
 
     int Reactor::RegisterTimerTask()

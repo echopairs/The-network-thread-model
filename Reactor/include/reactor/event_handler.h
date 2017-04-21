@@ -22,12 +22,22 @@ using event_t = unsigned int;
 class IEventHandler
 {
 public:
-    IEventHandler(handle_t fd):fd_(fd) {}
+    IEventHandler(handle_t fd = 0):fd_(fd) {}
     virtual void HandleRead() = 0;
     virtual void HandleWrite() = 0;
     virtual void HandleError() = 0;
     handle_t get_handle() { return fd_; };
-protected:
+    handle_t set_handle(handle_t fd) { this->fd_ = fd; };
+    const std::shared_ptr<IEventHandler> &get_this_shared_ptr_() const {
+        return this_shared_ptr_;
+    }
+
+    void set_this_shared_ptr_(const std::shared_ptr<IEventHandler> &this_shared_ptr_) {
+        IEventHandler::this_shared_ptr_ = this_shared_ptr_;
+    }
+
+public:
+    std::shared_ptr<IEventHandler> this_shared_ptr_;
     handle_t fd_;
     IEventHandler(){}
     virtual ~IEventHandler(){}

@@ -19,7 +19,7 @@ namespace reactor
         ~ReactorImpl();
 
         int RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt);
-        int UnRegisterHandler(std::shared_ptr<IEventHandler>);
+        int UnRegisterHandler(handle_t t);
         void HandleEvents();
 
     private:

@@ -12,6 +12,9 @@
 #include <memory.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <zconf.h>
+#include <thread>
+#include <iostream>
 
 namespace reactor {
 
@@ -43,6 +46,7 @@ namespace reactor {
             perror("create socket failed");
             exit(1);
         }
+        setnonblocking(sockfd);
         return  sockfd;
     }
 
@@ -66,6 +70,44 @@ namespace reactor {
     inline int listen_socket(int listenfd)
     {
         listen(listenfd, 10);
+    }
+
+
+    ssize_t socket_write(int sockfd, const char* buffer, size_t buflen)
+    {
+        size_t total = buflen;
+        const char* p = buffer;
+        ssize_t  nwrite = 0;
+
+        while(total)
+        {
+            nwrite = write(sockfd, p, total); // ET so we need write and write
+            if (nwrite < 0)
+            {
+                // 当socket是非阻塞时,如返回此错误,表示写缓冲队列已满
+                if (errno == EAGAIN)
+                {
+                    std::this_thread::sleep_for(std::chrono::microseconds(100));
+                    continue;
+                }
+                else
+                {
+                    std::cout << "write error" << std::endl;
+                    return -1;
+                }
+            }
+            else if (nwrite == total)
+            {
+                total = 0;
+                break;
+            }
+            else
+            {
+                total -= nwrite;
+                p += nwrite;
+            }
+        }
+        return buflen - total;
     }
 }
 #endif //REACTOR_SOCKET_HELP_H

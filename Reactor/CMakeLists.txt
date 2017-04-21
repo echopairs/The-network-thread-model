@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 project(reactor)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-g -std=c++11")
 include_directories(${reactor_SOURCE_DIR}/include)
 
 set(REACTOR_SRC

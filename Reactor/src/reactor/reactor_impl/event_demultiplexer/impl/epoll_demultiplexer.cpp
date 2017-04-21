@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <zconf.h>
 #include <vector>
+#include <iostream>
 
 namespace reactor
 {
@@ -68,8 +69,9 @@ namespace reactor
     void EpollDemultiplexer::WaitEvents(std::map<handle_t, std::shared_ptr<IEventHandler>> *handlers)
     {
         std::vector<epoll_event> ep_vets(fd_num_);
-
+        std::cout << "begin epoll_wait: " << fd_num_ << std::endl;
         int num = epoll_wait(epfd_, &ep_vets[0], ep_vets.size(), -1);
+        std::cout << "after epoll_wait" << num << std::endl;
         if (num > 0)
         {
             for (size_t i = 0; i < num; i++)
