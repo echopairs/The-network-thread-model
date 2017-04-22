@@ -3,6 +3,7 @@
 //
 
 #include <reactor/reactor.h>
+#include <thread>
 #include "request_handler.h"
 
 using namespace reactor;
