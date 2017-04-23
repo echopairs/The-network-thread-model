@@ -7,8 +7,6 @@
 external_libs/
 build/
 cmake-build-debug/
-/build
-/bin
 release/
 dist/
-external_libs/
+

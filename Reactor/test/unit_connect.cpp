@@ -27,7 +27,7 @@ int main()
                 return false;
             }
             while (1) {
-                ssize_t len = send(cli_sock, "timemessage", strlen("timemessage"), 0);
+/*                ssize_t len = send(cli_sock, "timemessage", strlen("timemessage"), 0);
                 if (len < 0) {
                     break;
                 }
@@ -36,6 +36,7 @@ int main()
                 ssize_t rl = recv(cli_sock, buf, 256, 0);
                 buf[rl] = '\0';
                 std::cout << buf << std::endl;
+*/
             }
         });
     }
