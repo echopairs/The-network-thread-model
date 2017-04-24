@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
-#include <unit/thread_pool.h>
+#include <utils/thread_pool.h>
 #include <proactor/event_handle.h>
+#include <utils/socket_help.h>
 
 class ThreadPoolTest : public testing::Test
 {

@@ -8,7 +8,7 @@
 #include <memory>
 #include <mutex>
 
-namespace unit
+namespace utils
 {
 template <typename T>
 class SingleTon

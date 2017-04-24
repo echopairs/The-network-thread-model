@@ -33,25 +33,25 @@ namespace proactor {
             this->read_handle_cb_ = cb;
         }
 
-//        ReadCb get_read_handle_cb() {
-//            return this->read_handle_cb_;
-//        }
+        std::function<void (const std::string & )> get_read_handle_cb() {
+            return this->read_handle_cb_;
+        }
 
         void set_write_handle_cb(WriteCb cb) {
             this->write_handle_cb_ = cb;
         }
 
-//        WriteCb get_write_handle_cb() {
-//            return this->write_handle_cb_;
-//        }
+      std::function<void()> get_write_handle_cb() {
+            return this->write_handle_cb_;
+        }
 
         void set_err_handle_cb(ErrorCb cb) {
             this->err_handle_cb_ = cb;
         }
 
-//        ErrorCb get_err_handle_cb() {
-//            return this->err_handle_cb_;
-//        }
+        std::function<void(int errocode)> get_err_handle_cb() {
+            return this->err_handle_cb_;
+        }
 
     private:
         std::function<void(const std::string &)> read_handle_cb_;
