@@ -18,5 +18,18 @@ set(PROACTOR_SRC
 
 add_library(proactor ${PROACTOR_SRC})
 
+set(EXAMPLE_SER_SRC example/example_server.cpp
+        include/utils/socket_help.h)
+
+add_executable(example_server ${EXAMPLE_SER_SRC})
+target_link_libraries(example_server ${proactor_SOURCE_DIR}/build/libproactor.a)
+
+set(EXAMPLE_CLT_SRC
+        example/example_client.cpp
+        include/utils/socket_help.h)
+
+add_executable(example_client ${EXAMPLE_CLT_SRC})
+
+
 enable_testing()
 add_subdirectory(tests)
