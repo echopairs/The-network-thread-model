@@ -11,6 +11,15 @@
 #include <arpa/inet.h>
 #include <zconf.h>
 #include <fcntl.h>
+#include <sys/epoll.h>
+#include <thread>
+#include <chrono>
+#include <iostream>
+#include <proactor/proactor.h>
+#include <vector>
+#include <strings.h>
+
+using namespace proactor;
 
 namespace utils
 {
@@ -67,7 +76,7 @@ namespace utils
         listen(listenfd, 10);
     }
 
-    ssize_t et_write(int sockfd, const char* buffer, size_t buflen)
+    inline ssize_t et_write(int sockfd, const char* buffer, size_t buflen)
     {
         size_t total = buflen;
         const char* p = buffer;
@@ -105,7 +114,7 @@ namespace utils
     }
 
 
-    ssize_t et_read(int sockfd, std::string &out_put)
+    inline ssize_t et_read(int sockfd, std::string &out_put)
     {
         if (sockfd < 0) {
             std::cout << "sockfd is nt 0" << std::endl;
@@ -131,7 +140,7 @@ namespace utils
         return out_put.length();
     }
 
-    std::vector<int> et_accept(int listenfd)
+    inline std::vector<int> et_accept(int listenfd)
     {
         std::vector<int> fds;
         while(true) {
@@ -157,5 +166,68 @@ namespace utils
         }
         return fds;
     }
+
+    inline void reset_one_shot(int epollfd, int fd, bool bone)
+    {
+        epoll_event event;
+        event.data.fd = fd;
+        event.events = EPOLLIN | EPOLLET;
+        if (bone)
+        {
+            event.events |= EPOLLONESHOT;
+        }
+
+        if (-1 == epoll_ctl(epollfd, EPOLL_CTL_MOD, fd, &event))
+        {
+            perror("resetoneshot epoll_ctl error!");
+        }
+    }
+
+    inline int add_fd(int epollfd, int fd, event_t evt, bool oneshot)
+    {
+        epoll_event ep_evt;
+        ep_evt.data.fd = fd;
+        ep_evt.events = EPOLLET;
+
+        if (evt & kReadEvent)
+        {
+            ep_evt.events |= EPOLLIN;
+        }
+
+        if (evt & kWriteEvent)
+        {
+            ep_evt.events |= EPOLLOUT;
+        }
+
+        if (oneshot)
+        {
+            ep_evt.events |= EPOLLONESHOT;
+        }
+
+        int r = epoll_ctl(epollfd, EPOLL_CTL_MOD, fd, &ep_evt);
+        if (r != 0)
+        {
+            if (errno == ENOENT)
+            {
+                if(epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &ep_evt) != 0)
+                {
+                    return -errno;
+                }
+            }
+        }
+        return 0;
+    }
+
+
+    inline int delete_fd(int epollfd, int fd)
+    {
+        epoll_event evt;
+        if (epoll_ctl(epollfd, EPOLL_CTL_DEL, fd, &evt) != 0) {
+            return -errno;
+        }
+        return 0;
+    }
+
+
 }
 #endif //PROACTOR_SOCKET_HELP_H

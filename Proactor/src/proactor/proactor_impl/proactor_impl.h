@@ -28,7 +28,7 @@ namespace proactor
         std::mutex events_mutex_;
         std::map<handle_t, std::shared_ptr<EventHandle> > event_handlers_;
         std::shared_ptr<EventDemultiplexer> event_io_ptr_;
-        ThreadPool thread_pool_;
+        std::shared_ptr<ThreadPool> thread_pool_;
     };
 }
 #endif //PROACTOR_PROACTOR_IMPL_H

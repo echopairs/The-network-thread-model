@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace proactor {
 
@@ -27,7 +28,8 @@ namespace proactor {
     class EventHandle
     {
     public:
-        EventHandle() {}
+        EventHandle():is_listenfd_(false) {
+        }
 
         void set_read_handle_cb(ReadCb cb) {
             this->read_handle_cb_ = cb;
@@ -53,7 +55,36 @@ namespace proactor {
             return this->err_handle_cb_;
         }
 
+
+        int get_handle_fd() const {
+            return handle_fd_;
+        }
+
+        void set_handle_fd(int handle_fd_) {
+            EventHandle::handle_fd_ = handle_fd_;
+        }
+
+        bool get_is_listenfd() const {
+            return is_listenfd_;
+        }
+
+        void set_is_listenfd(bool is_listenfd_) {
+            EventHandle::is_listenfd_ = is_listenfd_;
+        }
+
+        const std::function<void(const std::vector<int> &)> &get_connect_handle_cb() const {
+            return connect_handle_cb_;
+        }
+
+        void set_connect_handle_cb(const std::function<void(const std::vector<int> &)> &connect_handle_cb_) {
+            EventHandle::connect_handle_cb_ = connect_handle_cb_;
+        }
+
     private:
+        int handle_fd_;
+        bool is_listenfd_;
+
+        std::function<void (const std::vector<int> &fds) > connect_handle_cb_;
         std::function<void(const std::string &)> read_handle_cb_;
         std::function<void()> write_handle_cb_;
         std::function<void(int errocode)> err_handle_cb_;
