@@ -107,6 +107,7 @@ namespace proactor
         {
             proactor::handle_t listenfd;
             listenfd = utils::create_socket();
+            utils::bind_socket(listenfd, ip_, port_);
             utils::listen_socket(listenfd);
             set_handle_fd(listenfd);
         }
