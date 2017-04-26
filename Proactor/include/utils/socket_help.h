@@ -114,15 +114,16 @@ namespace utils
     }
 
 
-    inline ssize_t et_read(int sockfd, std::string &out_put)
+    inline ssize_t et_read(int sockfd, char out_put[])
     {
         if (sockfd < 0) {
             std::cout << "sockfd is nt 0" << std::endl;
             return -1;
         }
         ssize_t nread  = 0;
+        int n = 0;
         while(true) {
-            int n = 0;
+
             nread = read(sockfd, &out_put[0] + n, 1024);
             if (nread > 0) {
                 n += nread;
@@ -137,7 +138,7 @@ namespace utils
                 break;
             }
         }
-        return out_put.length();
+        return n;
     }
 
     inline std::vector<int> et_accept(int listenfd)
@@ -213,6 +214,7 @@ namespace utils
                 {
                     return -errno;
                 }
+                return 1;
             }
         }
         return 0;

@@ -10,6 +10,7 @@
 #include <utils/socket_help.h>
 #include <utils/singleton.h>
 #include <string.h>
+#include <atomic>
 
 namespace proactor
 {
@@ -18,9 +19,11 @@ namespace proactor
     {
     public:
         RequestHandler(handle_t fd):IEventHandler(fd) {
-
+            count_ = 0;
         }
-        void HandleWrite() {
+        virtual void HandleWrite() {
+            std::cout << "do handle write" << std::endl;
+            count_++;
             struct tm *ttime;
             char now[64];
             time_t tt;
@@ -40,7 +43,7 @@ namespace proactor
         }
 
         virtual void HandleRead(const std::string & msg) {
-
+            count_++;
             std::cout << msg << std::endl;
             if (msg.size() < 4) {
                 return;
@@ -48,8 +51,7 @@ namespace proactor
 
             if (strncasecmp("time", msg.c_str(), 4) == 0)
             {
-             //   unit::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), reactor::kWriteEvent);
-                // TODO
+              // utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kWriteEvent);
                 return;
             }
             else if(strncasecmp("exit", msg.c_str(), 4) == 0)
@@ -65,13 +67,18 @@ namespace proactor
         }
 
         virtual void HandleError(int errorcode) {
+            std::cout << "do handleError" << std::endl;
+            std::cout << "the counter is:" << count_ << std::endl;
+            utils::SingleTon<Proactor>::Instance()->UnRegisterHandler(this->get_handle_fd());
             set_this_shared_ptr_(nullptr);
             close(get_handle_fd());
         }
 
     private:
         char write_buffer_[1024];
+        std::atomic<int> count_;
     };
+   // std::atomic<int> RequestHandler::count_ = 0;
 
     class ListenHandler :public IEventHandler
     {
@@ -95,10 +102,11 @@ namespace proactor
 
         virtual void HandleConnect (const std::vector<int> &fds) {
             for (auto fd: fds) {
+                std::cout << "the request fd is: " << fd << std::endl;
                 auto handler = std::make_shared<RequestHandler>(fd);
                 handler->set_this_shared_ptr_(handler);
                 proactor::event_t evt;
-                evt |= proactor::kReadEvent;
+                evt = proactor::kReadEvent;
                 utils::SingleTon<Proactor>::Instance()->RegisterHandler(handler, evt);
             }
         }
@@ -110,6 +118,7 @@ namespace proactor
             utils::bind_socket(listenfd, ip_, port_);
             utils::listen_socket(listenfd);
             set_handle_fd(listenfd);
+            std::cout << "the listen fd is: " << get_handle_fd() << listenfd << std::endl;
         }
 
         ~ListenHandler() {

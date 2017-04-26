@@ -22,10 +22,17 @@ namespace proactor
     int EpollDemultiplexer::RegisterEvent(handle_t fd, event_t et)
     {
         int errcode = utils::add_fd(epfd_, fd, et, false);
-        if (!errcode)
-        {
-            // 0 is ok
+        if (errcode < 0) {
+            perror("add fd to epoll failed");
+            return errcode;
+        }
+        else if (errcode == 1) {
+            // add ok
+            std::cout << "add fd to epoll ok, fd is:" << fd << std::endl;
             fd_num_++;
+        }
+        else {
+            // mod ok
         }
         return 0;
     }
@@ -44,7 +51,8 @@ namespace proactor
     {
         std::vector<epoll_event> ep_vets(fd_num_);
         int num = epoll_wait(epfd_, &ep_vets[0], ep_vets.size(), -1);
-
+        std::cout << "the fd num is: " << fd_num_ << std::endl;
+        std::cout << "the return num is: " << num << std::endl;
         if (num > 0)
         {
             for (size_t i = 0; i < num; i++)
@@ -74,7 +82,7 @@ namespace proactor
                                 continue;
                             }
                         }
-                        std::string buffer;
+                        char buffer[1024];
                         auto length = utils::et_read(fd, buffer);
                         if (length == -1) {
                             std::cout << "fd: " << fd << "recv data failed" << std::endl;
