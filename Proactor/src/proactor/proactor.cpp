@@ -22,4 +22,10 @@ namespace proactor
     int Proactor::UnRegisterHandler(handle_t h) {
         proactor_impl_ptr_->UnRegisterHandler(h);
     }
+
+    void Proactor::HandleEvents() {
+        proactor_impl_ptr_->HandleEvents();
+    }
+
+
 }

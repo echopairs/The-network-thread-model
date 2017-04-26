@@ -55,7 +55,9 @@ namespace proactor
                 if (ep_vets[i].events & EPOLLERR ||
                         ep_vets[i].events & EPOLLHUP)
                 {
-
+                    auto error_task = std::bind(&IEventHandler::HandleError, (*handlers)[fd], std::placeholders::_1);
+                    thread_pool_->enqueue(error_task, 1);
+                    continue;
                 }
                 else
                 {
@@ -67,7 +69,8 @@ namespace proactor
                             auto fds = utils::et_accept(fd);
                             if (fds.size() > 0 )
                             {
-                               // thread_pool_->enqueue((*handlers)[fd]->get_connect_handle_cb(), fds);
+                                auto conn_task = std::bind(&IEventHandler::HandleConnect, (*handlers)[fd], fds);
+                                thread_pool_->enqueue(conn_task);
                                 continue;
                             }
                         }
@@ -75,19 +78,22 @@ namespace proactor
                         auto length = utils::et_read(fd, buffer);
                         if (length == -1) {
                             std::cout << "fd: " << fd << "recv data failed" << std::endl;
-                           // thread_pool_->enqueue((*handlers)[fd]->get_err_handle_cb(), 1);
+                            auto error_task = std::bind(&IEventHandler::HandleError, (*handlers)[fd], std::placeholders::_1);
+                            thread_pool_->enqueue(error_task, 1);
                             continue;
                         }
                         else
                         {
                             // read ok
-                           // thread_pool_->enqueue((*handlers)[fd]->get_read_handle_cb(), buffer);
+                            auto read_task = std::bind(&IEventHandler::HandleRead, (*handlers)[fd], std::placeholders::_1);
+                            thread_pool_->enqueue(read_task, buffer);
                         }
                     }
 
                     if(ep_vets[i].events & EPOLLOUT)
                     {
-                        //thread_pool_->enqueue((*handlers)[fd]->get_write_handle_cb());
+                        auto write_task = std::bind(&IEventHandler::HandleWrite, (*handlers)[fd]);
+                        thread_pool_->enqueue(write_task);
                     }
                 }
             }

@@ -29,11 +29,17 @@ namespace proactor {
     {
     public:
         IEventHandler(handle_t fd = 0):fd_(fd), is_listenfd_(false) {}
-        virtual void HandleRead() = 0;
+        virtual void HandleRead(const std::string & msg) = 0;
         virtual void HandleWrite() = 0;
-        virtual void HandleError() = 0;
+        virtual void HandleError(int errorcode) = 0;
+        virtual void HandleConnect (const std::vector<int> &fds) {};
+
         handle_t get_handle_fd() {
             return fd_;
+        }
+
+        void set_handle_fd(handle_t fd) {
+            fd_ = fd;
         }
 
         bool get_is_listenfd() const {
@@ -44,9 +50,19 @@ namespace proactor {
             IEventHandler::is_listenfd_ = is_listenfd_;
         }
 
+
+        const std::shared_ptr<IEventHandler> &get_this_shared_ptr_() const {
+            return this_shared_ptr_;
+        }
+
+        void set_this_shared_ptr_(const std::shared_ptr<IEventHandler> &this_shared_ptr_) {
+            IEventHandler::this_shared_ptr_ = this_shared_ptr_;
+        }
+
         virtual ~IEventHandler(){}
 
     private:
+        std::shared_ptr<IEventHandler> this_shared_ptr_;
         bool is_listenfd_;
         handle_t fd_;
 

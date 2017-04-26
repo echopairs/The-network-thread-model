@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(proactor)
 set(CMAKE_CXX_FLAGS "-g -std=c++11")
 include_directories(${proactor_SOURCE_DIR}/include)
-
+link_libraries(pthread)
 set(PROACTOR_SRC
         include/utils/singleton.h
         include/utils/thread_pool.h
