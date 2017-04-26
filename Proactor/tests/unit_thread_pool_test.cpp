@@ -45,6 +45,10 @@ public:
         return a+b;
     }
 
+    int MemFunction(int a, int b) {
+        return a + b;
+    }
+
 private:
     std::function<int(int a, int b) > member_function_;
 };
@@ -73,6 +77,13 @@ TEST_F(ThreadPoolTest, ClassMember)
     Base cm;
     auto r = thread_pool_.enqueue(cm.get_member_function(), 1, 2);
     EXPECT_EQ(3, r.get());
+
+    auto f = thread_pool_.enqueue([&cm](int a, int b){ return cm.MemFunction(a, b);}, 1, 2);
+    std::cout << f.get() << std::endl;
+
+    auto bf = std::bind(&Base::MemFunction, &cm, std::placeholders::_1, std::placeholders::_2);
+    auto t = thread_pool_.enqueue(bf, 1, 2);
+    EXPECT_EQ(3 ,t.get());
 }
 
 
