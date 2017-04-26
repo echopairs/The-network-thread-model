@@ -16,7 +16,7 @@ namespace proactor {
         // TODO add singal && time_heap
     }
 
-    int ProactorImpl::RegisterHandler(std::shared_ptr<EventHandle> handler, event_t evt)
+    int ProactorImpl::RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt)
     {
         std::lock_guard<std::mutex> lk(events_mutex_);
         event_handlers_[handler->get_handle_fd()] = handler;

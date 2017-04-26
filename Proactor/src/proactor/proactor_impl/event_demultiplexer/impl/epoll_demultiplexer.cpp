@@ -40,7 +40,7 @@ namespace proactor
         return 0;
     }
 
-    void EpollDemultiplexer::WaitEvents(std::map<handle_t, std::shared_ptr<EventHandle> > *handlers)
+    void EpollDemultiplexer::WaitEvents(std::map<handle_t, std::shared_ptr<IEventHandler> > *handlers)
     {
         std::vector<epoll_event> ep_vets(fd_num_);
         int num = epoll_wait(epfd_, &ep_vets[0], ep_vets.size(), -1);
@@ -55,7 +55,7 @@ namespace proactor
                 if (ep_vets[i].events & EPOLLERR ||
                         ep_vets[i].events & EPOLLHUP)
                 {
-                    thread_pool_->enqueue((*handlers)[fd]->get_err_handle_cb(), 1);
+
                 }
                 else
                 {
@@ -67,7 +67,7 @@ namespace proactor
                             auto fds = utils::et_accept(fd);
                             if (fds.size() > 0 )
                             {
-                                thread_pool_->enqueue((*handlers)[fd]->get_connect_handle_cb(), fds);
+                               // thread_pool_->enqueue((*handlers)[fd]->get_connect_handle_cb(), fds);
                                 continue;
                             }
                         }
@@ -75,19 +75,19 @@ namespace proactor
                         auto length = utils::et_read(fd, buffer);
                         if (length == -1) {
                             std::cout << "fd: " << fd << "recv data failed" << std::endl;
-                            thread_pool_->enqueue((*handlers)[fd]->get_err_handle_cb(), 1);
+                           // thread_pool_->enqueue((*handlers)[fd]->get_err_handle_cb(), 1);
                             continue;
                         }
                         else
                         {
                             // read ok
-                            thread_pool_->enqueue((*handlers)[fd]->get_read_handle_cb(), buffer);
+                           // thread_pool_->enqueue((*handlers)[fd]->get_read_handle_cb(), buffer);
                         }
                     }
 
                     if(ep_vets[i].events & EPOLLOUT)
                     {
-                        thread_pool_->enqueue((*handlers)[fd]->get_write_handle_cb());
+                        //thread_pool_->enqueue((*handlers)[fd]->get_write_handle_cb());
                     }
                 }
             }

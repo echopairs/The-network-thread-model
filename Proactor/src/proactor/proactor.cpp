@@ -15,7 +15,7 @@ namespace proactor
 
     }
 
-    int Proactor::RegisterHandler(std::shared_ptr<EventHandle> handler, event_t evt) {
+    int Proactor::RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt) {
         proactor_impl_ptr_->RegisterHandler(handler, evt);
     }
 

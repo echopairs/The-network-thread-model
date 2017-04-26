@@ -17,7 +17,7 @@ namespace proactor
         Proactor();
         ~Proactor();
 
-        int RegisterHandler(std::shared_ptr<EventHandle> handler, event_t evt);
+        int RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt);
         int UnRegisterHandler(handle_t h);
 
     private:

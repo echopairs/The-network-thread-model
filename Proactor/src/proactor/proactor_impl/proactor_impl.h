@@ -19,14 +19,14 @@ namespace proactor
         ProactorImpl(size_t num = 4);
         ~ProactorImpl();
 
-        int RegisterHandler(std::shared_ptr<EventHandle> handler, event_t evt);
+        int RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt);
 
         int UnRegisterHandler(handle_t t);
 
         void HandleEvents();
     private:
         std::mutex events_mutex_;
-        std::map<handle_t, std::shared_ptr<EventHandle> > event_handlers_;
+        std::map<handle_t, std::shared_ptr<IEventHandler> > event_handlers_;
         std::shared_ptr<EventDemultiplexer> event_io_ptr_;
         std::shared_ptr<ThreadPool> thread_pool_;
     };

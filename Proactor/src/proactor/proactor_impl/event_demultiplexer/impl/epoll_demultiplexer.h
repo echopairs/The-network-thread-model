@@ -17,7 +17,7 @@ namespace proactor
         int RegisterEvent(handle_t, event_t) override ;
         int UnRegisterEvent(handle_t) override ;
         ~EpollDemultiplexer();
-        void WaitEvents(std::map<handle_t,std::shared_ptr<EventHandle> > *handler) override ;
+        void WaitEvents(std::map<handle_t,std::shared_ptr<IEventHandler> > *handler) override ;
 
         const std::atomic<int> &get_fd_num() const {
             return fd_num_;

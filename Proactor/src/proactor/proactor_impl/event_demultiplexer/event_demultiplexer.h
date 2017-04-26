@@ -21,7 +21,7 @@ namespace proactor
         virtual int RegisterEvent(handle_t, event_t) = 0;
         virtual int UnRegisterEvent(handle_t) = 0;
 
-        virtual void WaitEvents(std::map<handle_t,std::shared_ptr<EventHandle> > *handler) = 0;
+        virtual void WaitEvents(std::map<handle_t,std::shared_ptr<IEventHandler> > *handler) = 0;
 
     protected:
         std::shared_ptr<utils::ThreadPool> thread_pool_;
