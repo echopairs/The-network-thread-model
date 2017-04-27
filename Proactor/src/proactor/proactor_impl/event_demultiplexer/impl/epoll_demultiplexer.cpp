@@ -9,6 +9,7 @@
 #include <utils/socket_help.h>
 #include "epoll_demultiplexer.h"
 #include <vector>
+#include <cstring>
 
 namespace proactor
 {
@@ -28,7 +29,6 @@ namespace proactor
         }
         else if (errcode == 1) {
             // add ok
-            std::cout << "add fd to epoll ok, fd is:" << fd << std::endl;
             fd_num_++;
         }
         else {
@@ -51,8 +51,6 @@ namespace proactor
     {
         std::vector<epoll_event> ep_vets(fd_num_);
         int num = epoll_wait(epfd_, &ep_vets[0], ep_vets.size(), -1);
-        std::cout << "the fd num is: " << fd_num_ << std::endl;
-        std::cout << "the return num is: " << num << std::endl;
         if (num > 0)
         {
             for (size_t i = 0; i < num; i++)
@@ -83,6 +81,7 @@ namespace proactor
                             }
                         }
                         char buffer[1024];
+                        memset((void*)buffer, 0, 1024);
                         auto length = utils::et_read(fd, buffer);
                         if (length == -1) {
                             std::cout << "fd: " << fd << "recv data failed" << std::endl;

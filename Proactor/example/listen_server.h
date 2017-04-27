@@ -23,7 +23,6 @@ namespace proactor
         }
         virtual void HandleWrite() {
             std::cout << "do handle write" << std::endl;
-            count_++;
             struct tm *ttime;
             char now[64];
             time_t tt;
@@ -35,7 +34,8 @@ namespace proactor
             ssize_t len = sprintf(write_buffer_, "current time: %s\r\n", now);
             len = utils::et_write(get_handle_fd(), write_buffer_, len);
             if (len > 0) {
-                utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kWriteEvent);
+                std::cout << "write ok" << std::endl;
+                utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kReadEvent);
             }
             else {
                 std::cout << "send failed" << std::endl;
@@ -44,14 +44,14 @@ namespace proactor
 
         virtual void HandleRead(const std::string & msg) {
             count_++;
-            std::cout << msg << std::endl;
+            std::cout << "do handle read msg is: " << msg << std::endl;
             if (msg.size() < 4) {
                 return;
             }
 
             if (strncasecmp("time", msg.c_str(), 4) == 0)
             {
-              // utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kWriteEvent);
+                utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kWriteEvent);
                 return;
             }
             else if(strncasecmp("exit", msg.c_str(), 4) == 0)
@@ -106,7 +106,7 @@ namespace proactor
                 auto handler = std::make_shared<RequestHandler>(fd);
                 handler->set_this_shared_ptr_(handler);
                 proactor::event_t evt;
-                evt = proactor::kReadEvent;
+                evt |= proactor::kReadEvent;
                 utils::SingleTon<Proactor>::Instance()->RegisterHandler(handler, evt);
             }
         }
@@ -118,7 +118,6 @@ namespace proactor
             utils::bind_socket(listenfd, ip_, port_);
             utils::listen_socket(listenfd);
             set_handle_fd(listenfd);
-            std::cout << "the listen fd is: " << get_handle_fd() << listenfd << std::endl;
         }
 
         ~ListenHandler() {

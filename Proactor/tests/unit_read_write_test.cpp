@@ -36,6 +36,7 @@ int main()
                 ssize_t rl = recv(cli_sock, buf, 256, 0);
                 buf[rl] = '\0';
                 std::cout << buf << std::endl;
+              //  std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         });
     }
