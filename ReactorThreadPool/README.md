@@ -1,26 +1,8 @@
 # Reactor
-Simple impl Reactor with epoll
+Simple impl Reactor Thread with epoll
 
 ## Introduction
-```
-Reactor/
-
-  |- .idea/             IDE生成文件(排除在版本控制库之外)
-  |- example/           Demo例子
-  |- build/             项目构建的工作目录 （排除在版本控制库之外）  
-  |- include/           发布需要的头文件目录  
-  |   |-reactor/        对外接口文件 
-  |   |-unit/           辅助头文件
-  |- release/           使用发布脚本发布的二进制文件保存目录 （排除在版本控制库之外） 
-  |- test/              单元测试目录
-  |- src/               项目源代码目录 
-  |   |- reactor/ 		  核心模块源码
-  |       |- reactor_impl/ pimpl手法具体实现
-  |       |- reactor.cpp
-  |   |- third_parties/   第三方依赖库(排除咋控制库之外) 
-  |- tools/             构建/发布/测试等相关脚本 
-  |- CMakeLists.txt     编译文件
-```
+在Reactor基础上增加了线程池来处理请求。实现了半同步半异步网络模式
 
 ## Requirement
 ### Tools
