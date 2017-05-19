@@ -31,6 +31,9 @@ namespace mreactor {
     void ReactorImpl::HandleEvents() {
         // TODO signal events
         // TODO timeout events
+        if (event_handlers_.size() <= 0 ) {
+            return;
+        }
         event_io_ptr_->WaitEvents(&event_handlers_);
     }
 }

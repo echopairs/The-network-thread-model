@@ -9,6 +9,7 @@
 
 namespace mreactor
 {
+    class Reactor;
     using handle_t = int;
     using event_t = unsigned int;
     enum
@@ -36,7 +37,16 @@ namespace mreactor
             IEventHandler::this_shared_ptr_ = this_shared_ptr_;
         }
 
+        const std::shared_ptr<Reactor> &get_reactor_ptr() const {
+            return _reactor_ptr;
+        }
+
+        void set_reactor_ptr(const std::shared_ptr<Reactor> &_reactor_ptr) {
+            IEventHandler::_reactor_ptr = _reactor_ptr;
+        }
+
     public:
+        std::shared_ptr<Reactor> _reactor_ptr;
         std::shared_ptr<IEventHandler> this_shared_ptr_;
         handle_t fd_;
         IEventHandler(){}

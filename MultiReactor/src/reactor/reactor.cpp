@@ -3,24 +3,25 @@
 //
 
 #include <mreactor/reactor.h>
+#include <thread>
+#include <iostream>
 #include "reactor_impl/reactor_impl.h"
 
 namespace mreactor  {
 
     Reactor::Reactor():_reactor_impl_ptr(nullptr),_if_stop(false) {
-      //  _reactor_impl_ptr = std::make_shared<ReactorImpl>();
+        _reactor_impl_ptr = std::make_shared<ReactorImpl>();
     }
 
     Reactor::~Reactor() {
-        // TODO
     }
 
     int Reactor::RegisterHandler(std::shared_ptr<IEventHandler> handler, event_t evt) {
-        // todo
+        _reactor_impl_ptr->RegisterHandler(handler, evt);
     }
 
     int Reactor::UnRegisterHandler(handle_t h) {
-        // todo
+        _reactor_impl_ptr->UnRegisterHandler(h);
     }
 
     int Reactor::RegisterTimerTask() {
@@ -29,11 +30,11 @@ namespace mreactor  {
 
     void Reactor::HandleEvents(std::function<void()> cb) {
         while(!_if_stop) {
-            // loop
             _reactor_impl_ptr->HandleEvents();
             if(cb) {
                 cb();
             }
+        //    std::this_thread::sleep_for(std::chrono::microseconds(100));
         }
     }
 

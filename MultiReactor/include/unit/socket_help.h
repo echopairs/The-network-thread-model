@@ -52,6 +52,23 @@ namespace utils
         return  sockfd;
     }
 
+    inline int make_listen_socket_reuseable_port(int sockfd)
+    {
+        int one = 1;
+        /* REUSEPORT on Linux 3.9+ means, "Multiple servers (processes or
+         * threads) can bind to the same port if they each set the option. */
+        return setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, (void*) &one,
+                          (size_t)sizeof(one));
+    }
+
+    int make_listen_socket_reuseable(int sockfd)
+    {
+        int one = 1;
+        return setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (void*) &one,
+                          (size_t)sizeof(one));
+    }
+
+
     inline int bind_socket(int sockfd, const std::string & ip, unsigned int port)
     {
         struct sockaddr_in serveraddr;
@@ -61,6 +78,7 @@ namespace utils
         serveraddr.sin_addr.s_addr = inet_addr(ip.c_str());
         serveraddr.sin_port = htons(port);
 
+        make_listen_socket_reuseable(sockfd);
         int b = bind(sockfd, (const sockaddr *) &serveraddr, sizeof(serveraddr));
         if (b < 0)
         {

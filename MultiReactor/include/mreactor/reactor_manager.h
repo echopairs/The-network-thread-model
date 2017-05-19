@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <queue>
+#include <list>
 #include <thread>
 #include <atomic>
 #include "conn_task.h"
@@ -37,11 +38,12 @@ namespace mreactor {
         std::shared_ptr<Reactor> _main_reactor;
         std::thread _main_thread;
 
+        void _StartWorkReactor();
         void Notify(std::shared_ptr<ConnTask>);
 
         std::shared_ptr<WorkReactor> Pop();
         void Push(std::shared_ptr<WorkReactor> work_reactor);
-        std::queue<std::shared_ptr<WorkReactor> > _work_reactors;
+        std::list<std::shared_ptr<WorkReactor> > _work_reactors;
 
         std::atomic<bool> _is_in_loop;
         std::atomic<bool> _is_inited;

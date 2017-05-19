@@ -73,6 +73,7 @@ namespace mreactor {
                 break;
             }
             _task_queue.pop();
+            conn_task->get_event_ptr()->set_reactor_ptr(_reactor);
             _reactor->RegisterHandler(conn_task->get_event_ptr(), conn_task->get_evt_type());
         }
     }
