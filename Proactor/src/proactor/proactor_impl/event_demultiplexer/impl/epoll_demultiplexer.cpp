@@ -22,6 +22,7 @@ namespace proactor
 
     int EpollDemultiplexer::RegisterEvent(handle_t fd, event_t et)
     {
+        et |= proactor::kReadEvent;
         int errcode = utils::add_fd(epfd_, fd, et, false);
         if (errcode < 0) {
             perror("add fd to epoll failed");

@@ -35,7 +35,7 @@ namespace proactor
             len = utils::et_write(get_handle_fd(), write_buffer_, len);
             if (len > 0) {
                 std::cout << "write ok" << std::endl;
-                utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kReadEvent);
+               // utils::SingleTon<Proactor>::Instance()->RegisterHandler(get_this_shared_ptr_(), proactor::kReadEvent);
             }
             else {
                 std::cout << "send failed" << std::endl;
