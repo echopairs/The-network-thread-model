@@ -34,7 +34,7 @@ namespace mreactor
             ep_evt.events |= EPOLLOUT;
         }
 
-//        ep_evt.events |= EPOLLONESHOT;
+        ep_evt.events |= EPOLLONESHOT;
 
         int r = epoll_ctl(epfd_, EPOLL_CTL_MOD, fd, &ep_evt);
         if (r != 0)

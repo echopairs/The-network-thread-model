@@ -26,7 +26,8 @@ int main()
                 std::cout << "connect failed" << std::endl;
                 return false;
             }
-            for (int j = 0; j < 1000; j++) {
+
+            for (int j = 0; j < 1000000000000; j++) {
                 ssize_t len = send(cli_sock, "timemessage", strlen("timemessage"), 0);
                 if (len < 0) {
                     break;
@@ -36,7 +37,7 @@ int main()
                 ssize_t rl = recv(cli_sock, buf, 256, 0);
                 buf[rl] = '\0';
                 std::cout << buf << std::endl;
-              //  std::this_thread::sleep_for(std::chrono::seconds(1));
+//                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
         });
     }

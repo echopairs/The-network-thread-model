@@ -14,7 +14,6 @@ namespace mreactor {
         // 1. create listen handle && set listen handle && begin listen
         auto listen_handle = std::make_shared<ListenHandler>(ip, port);
         listen_handle->set_this_shared_ptr_(listen_handle);
-        listen_handle->set_reactor_ptr(_main_reactor);
         listen_handle->Start();
         listen_handle->set_register_cb([this](const std::shared_ptr<ConnTask> conn) {
             Notify(conn);
@@ -22,6 +21,7 @@ namespace mreactor {
 
         // 2. create main reactor && register listen_handle to main reactor
         _main_reactor = std::make_shared<Reactor>();
+        listen_handle->set_reactor_ptr(_main_reactor);
         _main_reactor->RegisterHandler(listen_handle, mreactor::kReadEvent);
 
         // 3. create work reactor

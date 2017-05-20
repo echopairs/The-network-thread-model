@@ -12,7 +12,7 @@ int main()
 {
     std::thread threads[65536];
     for (int i = 0; i < 1024; i++) {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(500));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(30));
         threads[i] = std::thread([]() {
             struct sockaddr_in addr;
             addr.sin_family = AF_INET;

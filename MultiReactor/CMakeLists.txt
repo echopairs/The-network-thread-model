@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(${mreactor_SOURCE_DIR}/include)
 set(CMAKE_CXX_FLAGS "-g -std=c++11")
 
 set(SOURCE
-        main.cc
         include/mreactor/conn_task.h
         include/mreactor/event_handler.h
         include/mreactor/listen_handler.h
@@ -19,9 +18,9 @@ set(SOURCE
         src/reactor/reactor_impl/event_demultiplexer/impl/epoll_demultiplexer.cpp
         )
 
-
-add_executable(main ${SOURCE})
-target_link_libraries(main pthread)
+add_library(mreactor ${SOURCE})
+add_executable(mreactor_server main.cc)
+target_link_libraries(mreactor_server mreactor pthread)
 
 enable_testing()
 add_subdirectory(tests)

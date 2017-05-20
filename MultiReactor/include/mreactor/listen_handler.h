@@ -72,9 +72,11 @@ namespace   mreactor {
             strftime(now, 64, "%Y-%m-%d %H:%M:%S", ttime);
             memset(write_buffer_, 0, 1024);
             ssize_t len = sprintf(write_buffer_, "current time: %s\r\n", now);
+            std::cout << "begin send" << std::endl;
             len = utils::et_write(get_handle(), write_buffer_, len);
             if (len > 0) {
-                // todo
+                get_reactor_ptr()->RegisterHandler(get_this_shared_ptr_(), mreactor::kReadEvent);
+                std::cout << "send ok" << std::endl;
             } else {
                 std::cout << "send failed" << std::endl;
             }
@@ -133,6 +135,7 @@ namespace   mreactor {
                     break ;
                 }
             }
+            get_reactor_ptr()->RegisterHandler(get_this_shared_ptr_(), mreactor::kReadEvent);
         }
 
         void HandleWrite() override {

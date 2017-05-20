@@ -18,6 +18,7 @@
 #include <vector>
 #include <strings.h>
 
+#include <mreactor/event_handler.h>
 using namespace mreactor;
 
 namespace utils

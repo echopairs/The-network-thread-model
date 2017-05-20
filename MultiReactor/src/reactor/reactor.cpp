@@ -34,7 +34,7 @@ namespace mreactor  {
             if(cb) {
                 cb();
             }
-        //    std::this_thread::sleep_for(std::chrono::microseconds(100));
+            std::this_thread::sleep_for(std::chrono::microseconds(100));
         }
     }
 
