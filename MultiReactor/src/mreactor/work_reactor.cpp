@@ -67,7 +67,7 @@ namespace mreactor {
 
     void WorkReactor::_deal_conn_task() {
         std::lock_guard<std::mutex> lk(_task_mutex);
-        while(true) {
+        while(_task_queue.size() > 0) {
             auto conn_task = _task_queue.front();
             if (!conn_task) {
                 break;
